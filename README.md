@@ -17,36 +17,42 @@ Kalman filter is so effective as it continually estimates the state of a dynamic
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="50%"> 
 ※1
 
+### Variables Used in the Kalman Filter Mathematical Model
+- **State Vector \(x(t)\)**: Represents the estimated states of the system, including position \((x, y)\) and velocity \((vx, vy)\). Velocity is derived from changes in position over time, calculated as:
+  $$vx = \frac{(x_{\text{current}} - x_{\text{previous}})}{\Delta t}$$
+  $$vy = \frac{(y_{\text{current}} - y_{\text{previous}})}{\Delta t}$$
+  where \(\Delta t\) is the time interval between frames.
 
-### Variables used in this Mathematical Model (Kalman Filter)
-- $x(t)$ State vector: Represents the estimated states of the system and Includes position $(x, y)$ and velocity $(vx, vy)$
-    Velocity is derived from changes in position over time, calculated as $$vx = (x_current - x_previous) / Δt$$
-    $$vy = (y_current - y_previous) / Δt$$, where $Δt$ is the time interval between frames
--  $z(t)$ Measurement vector:The observed positions from CNN (detection system), which can be noisy
--  $P(t|t-1)$ process covariance matrix
-- $F$ State Transition matrix: Describes how the state evolves from one point to the next without considering the new measurements (Defines the linear relationship between the current state and the next state, factoring in time dynamics)
--  $Q$ Process Noise Covariance: Reflects the uncertainty in the model's predictions (Quantifies the expected variability in the system dynamics, based on empirical data)
-- $R$ Measurement Noise Covariance: Reflects the uncertainty in the observed measurements (Represents the accuracy of the measurements, calculated from the variance of the CNN's outputs)
-- Control Matrix $B$ and Vector $u$: Generally set to zero, indicating no external forces affecting the motion of the object
-- $H$ Measurement Matrix: Relates(map) the state vector to the measurement vector, focusing primarily on the position components
+- **Measurement Vector \(z(t)\)**: The observed positions from a CNN (detection system), which can be noisy
+
+- **Process Covariance Matrix \(P(t|t-1)\)**: Represents the estimate of the covariance of the state vector
+
+- **State Transition Matrix \(F\)**: Describes how the state evolves from one point to the next without considering the new measurements. Defines the linear relationship between the current state and the next state, factoring in time dynamics
+
+- **Process Noise Covariance \(Q\)**: Reflects the uncertainty in the model's predictions. Quantifies the expected variability in the system dynamics, based on empirical data
+
+- **Measurement Noise Covariance \(R\)**: Reflects the uncertainty in the observed measurements. Represents the accuracy of the measurements, calculated from the variance of the CNN's outputs
+
+- **Control Matrix \(B\) and Vector \(u\)**: Generally set to zero, indicating no external forces affecting the motion of the object
+
+- **Measurement Matrix \(H\)**: Relates (maps) the state vector to the measurement vector, focusing primarily on the position components
+
 
 ### Operation Cycle of the Kalman Filter
-The Kalman Filter updates in two primary steps: **Prediction** and **Correction**.
+The Kalman Filter updates in two primary steps: **Prediction** and **Correction**
 
 #### Prediction
 This step projects the current state estimate into the future using the system dynamics:
   - **Predicted State Estimate**: $$\hat{x}^- = F \hat{x}$$
   - **Predicted Covariance Estimate**: $$P^- = FPF^T + Q$$
-    , where $\(F\)$ is the state transition matrix that models the system dynamics, $\(P\)$ is the previous covariance matrix, $\(Q\)$ is the process noise covariance matrix, and $\(\hat{x}\)$ is the previous state estimate.
+    , where $\(F\)$ is the state transition matrix that models the system dynamics, $\(P\)$ is the previous covariance matrix, $\(Q\)$ is the process noise covariance matrix, and $\(\hat{x}\)$ is the previous state estimate
 
 #### Correction
 This step adjusts the prediction based on the new measurement data:
   - **Kalman Gain Calculation**: $$K = P^- H^T (H P^- H^T + R)^{-1}$$
   - **Updated State Estimate**: $$\hat{x} = \hat{x}^- + K(z - H \hat{x}^-)$$
   - **Updated Covariance Estimate**: $$P = (I - KH) P^-$$
-    , where $\(K\)$ is the Kalman Gain, $\(P^-\)$ is the predicted covariance, $\(H\)$ is the measurement matrix that maps the state estimate to the measurement domain, $\(R\)$ is the measurement noise covariance, $\(I\)$ is the identity matrix, and $\(z\)$ is the actual measurement from the object detector.
-
---
+    , where $\(K\)$ is the Kalman Gain, $\(P^-\)$ is the predicted covariance, $\(H\)$ is the measurement matrix that maps the state estimate to the measurement domain, $\(R\)$ is the measurement noise covariance, $\(I\)$ is the identity matrix, and $\(z\)$ is the actual measurement from the object detector
 
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="40%"> 
 ※2
@@ -55,7 +61,7 @@ This step adjusts the prediction based on the new measurement data:
 Velocity is critical for predicting the future position of the ball, particularly in cases of occlusion or when the ball moves out of the camera frame. By estimating velocity, the Kalman Filter can project the ball's trajectory, enhancing tracking continuity and robustness under varying conditions.
 
 ### How Kalman Filter is useful for real-time object tracking
-The implementation of the Kalman Filter in this project demonstrates its efficacy in combining real-time object detection with predictive tracking, providing a robust solution for tracking objects in motion within noisy environments
+The implementation of the Kalman Filter in this project demonstrates its efficacy in combining real-time object detection with predictive tracking, providing a robust solution for tracking objects in motion within noisy environments.
 
 
 
