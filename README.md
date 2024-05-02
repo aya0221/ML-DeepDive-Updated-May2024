@@ -37,7 +37,7 @@ The Kalman Filter updates in two primary steps: **Prediction** and **Correction*
 This step projects the current state estimate into the future using the system dynamics:
   - **Predicted State Estimate**: $$\hat{x}^- = F \hat{x}$$
   - **Predicted Covariance Estimate**: $$P^- = FPF^T + Q$$
-    , where \(F\) is the state transition matrix that models the system dynamics, \(P\) is the previous covariance matrix, \(Q\) is the process noise covariance matrix, and \(\hat{x}\) is the previous state estimate.
+    , where $\(F\)$ is the state transition matrix that models the system dynamics, $\(P\)$ is the previous covariance matrix, $\(Q\)$ is the process noise covariance matrix, and $\(\hat{x}\)$ is the previous state estimate.
 
 #### Correction
 This step adjusts the prediction based on the new measurement data:
