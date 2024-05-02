@@ -29,7 +29,7 @@ The correction step adjusts this prediction based on the new measurement:
 
 $$K = P^- H^T (H P^- H^T + R)^{-1}$$
 
-$$x_corrected = x_predicted + K(z - H x_predicted)$$
+$$x_corrected = x_predicted + K(z - H * x_predicted)$$
 
 $$P_corrected = (I - K H) P^-$$
 
