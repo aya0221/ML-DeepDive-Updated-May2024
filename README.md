@@ -11,22 +11,25 @@ Containing detailed explanations and practical code examples for key machine lea
 # Kalman Filter Application in Object Tracking
 
 ### Overview
-I employed the Kalman Filter in object tracking tasks to enhance the tracking accuracy of balls in video sequences. This method improves tracking by using data from a CNN-based object detector, which, while effective, often includes some errors or 'noise.' These errors can arise due to variations in lighting, partial blockages of the object, or limitations of the detector itself. The Kalman Filter helps correct these inaccuracies by blending the imperfect measurements with predicted states from previous data, leading to more reliable tracking outcomes! Broad idea is it is propagating and updating Gaussians and updating their covariances.
+I employed the Kalman Filter in object tracking tasks to enhance the tracking accuracy of balls in video sequences. This method improves tracking by using data from a CNN-based object detector, which, while effective, often includes some errors or noise. These errors can arise due to variations in lighting, partial blockages of the object, or limitations of the detector itself. The Kalman Filter helps correct these inaccuracies by blending the imperfect measurements with predicted states from previous data, leading to more reliable tracking outcomes! 
+Kalman filter is so effective as it continually estimates the state of a dynamic system, adjusts those estimates based on new measurements, and predicts future states.
+ Broad idea is it is propagating and updating Gaussians and updating their covariances. Using the current state and estimates, we can predict the next state. The second step, correction, includes a noisy measurement which helps update the state.
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="50%"> 
 ※1
 
 
-### Components
-- $x(t)$ State vector: Includes position $(x, y)$ and velocity $(vx, vy)$.
+### Variables
+- $x(t)$ State vector: Represents the estimated states of the system and Includes position $(x, y)$ and velocity $(vx, vy)$
     Velocity is derived from changes in position over time, calculated as $$vx = (x_current - x_previous) / Δt$$
     $$vy = (y_current - y_previous) / Δt$$, where $Δt$ is the time interval between frames
--  $z(t)$ Measurement vector: Consists of the detected positions from the CNN, subject to measurement noise
+-  $z(t)$ Measurement vector:The observed positions from CNN (detection system), which can be noisy
 -  $P(t|t-1)$ process covariance matrix
-- $F$ State Transition matrix: Defines the linear relationship between the current state and the next state, factoring in time dynamics
--  $Q$ Process Noise Covariance: Quantifies the expected variability in the system dynamics, based on empirical data
-- $R$ Measurement Noise Covariance: Represents the accuracy of the measurements, calculated from the variance of the CNN's outputs
+- $F$ State Transition matrix: Describes how the state evolves from one point to the next without considering the new measurements (Defines the linear relationship between the current state and the next state, factoring in time dynamics)
+-  $Q$ Process Noise Covariance: Reflects the uncertainty in the model's predictions (Quantifies the expected variability in the system dynamics, based on empirical data)
+- $R$ Measurement Noise Covariance: Reflects the uncertainty in the observed measurements (Represents the accuracy of the measurements, calculated from the variance of the CNN's outputs)
 - Control Matrix $B$ and Vector $u$: Generally set to zero, indicating no external forces affecting the motion of the object
-- $H$ Measurement Matrix: Maps the state vector to the measurement vector, primarily focusing on the positional components and excluding velocity
+- $H$ Measurement Matrix: Relates(map) the state vector to the measurement vector, focusing primarily on the position components
+
 
 ### Mathematical Model
 The Kalman Filter updates in two steps: **Prediction** and **Correction**. 
