@@ -11,21 +11,22 @@ Containing detailed explanations and practical code examples for key machine lea
 # Kalman Filter Application in Object Tracking
 
 ### Overview
-I employed the Kalman Filter in object tracking tasks to enhance the tracking accuracy of balls in video sequences. This method improves tracking by using data from a CNN-based object detector, which, while effective, often includes some errors or 'noise.' These errors can arise due to variations in lighting, partial blockages of the object, or limitations of the detector itself. The Kalman Filter helps correct these inaccuracies by blending the imperfect measurements with predicted states from previous data, leading to more reliable tracking outcomes!
+I employed the Kalman Filter in object tracking tasks to enhance the tracking accuracy of balls in video sequences. This method improves tracking by using data from a CNN-based object detector, which, while effective, often includes some errors or 'noise.' These errors can arise due to variations in lighting, partial blockages of the object, or limitations of the detector itself. The Kalman Filter helps correct these inaccuracies by blending the imperfect measurements with predicted states from previous data, leading to more reliable tracking outcomes! Broad idea is it is propagating and updating Gaussians and updating their covariances.
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="50%"> 
 ※1
 
 
 ### Components
-- State Vector $x$: Includes position $(x, y)$ and velocity $(vx, vy)$.
+- $x(t)$ State vector: Includes position $(x, y)$ and velocity $(vx, vy)$.
     Velocity is derived from changes in position over time, calculated as $$vx = (x_current - x_previous) / Δt$$
-  $$vy = (y_current - y_previous) / Δt$$, where $Δt$ is the time interval between frames
-- Measurement Vector $z$: Consists of the detected positions from the CNN, subject to measurement noise
-- State Transition Matrix $A$: Defines the linear relationship between the current state and the next state, factoring in time dynamics
+    $$vy = (y_current - y_previous) / Δt$$, where $Δt$ is the time interval between frames
+-  $z(t)$ Measurement vector: Consists of the detected positions from the CNN, subject to measurement noise
+-  $P(t|t-1)$ process covariance matrix
+- $F$ State Transition matrix: Defines the linear relationship between the current state and the next state, factoring in time dynamics
+-  $Q$ Process Noise Covariance: Quantifies the expected variability in the system dynamics, based on empirical data
+- $R$ Measurement Noise Covariance: Represents the accuracy of the measurements, calculated from the variance of the CNN's outputs
 - Control Matrix $B$ and Vector $u$: Generally set to zero, indicating no external forces affecting the motion of the object
-- Process Noise Covariance $Q$: Quantifies the expected variability in the system dynamics, based on empirical data
-- Measurement Noise Covariance $R$: Represents the accuracy of the measurements, calculated from the variance of the CNN's outputs
-- Measurement Matrix $H$: Maps the state vector to the measurement vector, primarily focusing on the positional components and excluding velocity
+- $H$ Measurement Matrix: Maps the state vector to the measurement vector, primarily focusing on the positional components and excluding velocity
 
 ### Mathematical Model
 The Kalman Filter updates in two steps: **Prediction** and **Correction**. 
@@ -38,6 +39,9 @@ $$K = P^- H^T (H P^- H^T + R)^{-1}$$
 
 $$x_corrected = x_predicted + K(z - H * x_predicted)$$
 $$P_corrected = (I - K H) P^-$$, where $K$ is the Kalman Gain, $P^-$ is the predicted covariance, $I$ is the identity matrix, and $z$ is the actual measurement from the object detector
+
+<img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="40%"> 
+※2
 
 ### Utilization of Velocity
 Velocity is critical for predicting the future position of the ball, particularly in cases of occlusion or when the ball moves out of the camera frame. By estimating velocity, the Kalman Filter can project the ball's trajectory, enhancing tracking continuity and robustness under varying conditions.
@@ -77,3 +81,4 @@ A Non-linear CNN incorporates non-linear activation functions like ReLU (Rectifi
 
 # Sources
 ※1:[Sort and Deep-SORT Based Multi-Object Tracking for Mobile Robotics: Evaluation with New Data Association Metrics](https://www.researchgate.net/publication/358134782_Sort_and_Deep-SORT_Based_Multi-Object_Tracking_for_Mobile_Robotics_Evaluation_with_New_Data_Association_Metrics)
+※2: [Articles / Artificial Intelligence / Computer vision](https://www.codeproject.com/Articles/865935/Object-Tracking-Kalman-Filter-with-Ease)
