@@ -18,7 +18,7 @@ Kalman filter is so effective as it continually estimates the state of a dynamic
 ※1
 
 
-### Variables
+### Variables used in this Mathematical Model (Kalman Filter)
 - $x(t)$ State vector: Represents the estimated states of the system and Includes position $(x, y)$ and velocity $(vx, vy)$
     Velocity is derived from changes in position over time, calculated as $$vx = (x_current - x_previous) / Δt$$
     $$vy = (y_current - y_previous) / Δt$$, where $Δt$ is the time interval between frames
@@ -30,18 +30,23 @@ Kalman filter is so effective as it continually estimates the state of a dynamic
 - Control Matrix $B$ and Vector $u$: Generally set to zero, indicating no external forces affecting the motion of the object
 - $H$ Measurement Matrix: Relates(map) the state vector to the measurement vector, focusing primarily on the position components
 
+### Operation Cycle of the Kalman Filter
+The Kalman Filter updates in two primary steps: **Prediction** and **Correction**.
 
-### Mathematical Model
-The Kalman Filter updates in two steps: **Prediction** and **Correction**. 
-- Prediction step, the next state of the ball is estimated as:
-$$x_predicted = x + vx * Δt$$
-$$y_predicted = y + vy * Δt$$
+#### Prediction
+This step projects the current state estimate into the future using the system dynamics:
+  - **Predicted State Estimate**: $$\hat{x}^- = F \hat{x}$$
+  - **Predicted Covariance Estimate**: $$P^- = FPF^T + Q$$
+    , where \(F\) is the state transition matrix that models the system dynamics, \(P\) is the previous covariance matrix, \(Q\) is the process noise covariance matrix, and \(\hat{x}\) is the previous state estimate.
 
-- Correction step adjusts this prediction based on the new measurement:
-$$K = P^- H^T (H P^- H^T + R)^{-1}$$
+#### Correction
+This step adjusts the prediction based on the new measurement data:
+  - **Kalman Gain Calculation**: $$K = P^- H^T (H P^- H^T + R)^{-1}$$
+  - **Updated State Estimate**: $$\hat{x} = \hat{x}^- + K(z - H \hat{x}^-)$$
+  - **Updated Covariance Estimate**: $$P = (I - KH) P^-$$
+    , where $\(K\)$ is the Kalman Gain, $\(P^-\)$ is the predicted covariance, $\(H\)$ is the measurement matrix that maps the state estimate to the measurement domain, $\(R\)$ is the measurement noise covariance, $\(I\)$ is the identity matrix, and $\(z\)$ is the actual measurement from the object detector.
 
-$$x_corrected = x_predicted + K(z - H * x_predicted)$$
-$$P_corrected = (I - K H) P^-$$, where $K$ is the Kalman Gain, $P^-$ is the predicted covariance, $I$ is the identity matrix, and $z$ is the actual measurement from the object detector
+--
 
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="40%"> 
 ※2
