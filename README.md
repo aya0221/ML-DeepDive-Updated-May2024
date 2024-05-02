@@ -17,6 +17,13 @@ Kalman filter is so effective as it continually estimates the state of a dynamic
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="50%"> 
 ※1
 
+### My application of Kalman Filter on the Video Object Tracking
+The Kalman Filter is employed after detecting objects using a CNN-based detection system. It uses the noisy measurements of object positions to:
+- **Predict** the object's future location based on its current estimated state
+- **Correct** this prediction using new measurement data to refine the accuracy of the object's tracked position
+Kalman Filter helps in maintaining robust tracking even when the object is partially occluded or when the frame includes significant noise!
+
+
 ### Variables Used in the Kalman Filter Mathematical Model
 - **State Vector \(x(t)\)**: Represents the estimated states of the system, including position \((x, y)\) and velocity \((vx, vy)\). Velocity is derived from changes in position over time, calculated as:
   $$vx = \frac{(x_{\text{current}} - x_{\text{previous}})}{\Delta t}$$
