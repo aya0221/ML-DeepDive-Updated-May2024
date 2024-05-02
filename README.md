@@ -32,5 +32,5 @@ Where `K` is the Kalman Gain, `P^-` is the predicted covariance, `I` is the iden
 ### Utilization of Velocity
 Velocity is critical for predicting the future position of the ball, particularly in cases of occlusion or when the ball moves out of the camera frame. By estimating velocity, the Kalman Filter can project the ball's trajectory, enhancing tracking continuity and robustness under varying conditions.
 
-### Conclusion
+### How Kalman Filter is useful for real-time object tracking
 The implementation of the Kalman Filter in this project demonstrates its efficacy in combining real-time object detection with predictive tracking, providing a robust solution for tracking objects in motion within noisy environments
