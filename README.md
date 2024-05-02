@@ -68,9 +68,8 @@ $$p = p-learning rate * ∂/∂p = p-α * ∂/∂p$$
 During training, repeatedly adjusting the parameters of the model, using either the whole dataset (batch) or subsets of it (mini-batches), to minimize the loss function over multiple iterations or epochs
 
 # Conv1D and Conv2D
-**Conv1D**: for 1D data, e.g., time-series, audio data - *where the layer will learn from patterns occurring over time*.
-
-**Conv2D** for 2D data, e.g., images - *where the layers help learn features from the input by applying filters that capture spatial hierarchies*, (identifying simple edges in early layers and complex features like textures in deeper layers).
+- **Conv1D**: for 1D data, e.g., time-series, audio data - *where the layer will learn from patterns occurring over time*.
+- **Conv2D** for 2D data, e.g., images - *where the layers help learn features from the input by applying filters that capture spatial hierarchies*, (identifying simple edges in early layers and complex features like textures in deeper layers).
 
 
 # Non-linear CNN
