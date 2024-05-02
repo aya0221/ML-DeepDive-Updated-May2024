@@ -66,14 +66,6 @@ This step adjusts the prediction based on the new measurement data:
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="40%"> 
 ※2
 
-### Utilization of Velocity
-Velocity is critical for predicting the future position of the ball, particularly in cases of occlusion or when the ball moves out of the camera frame. By estimating velocity, the Kalman Filter can project the ball's trajectory, enhancing tracking continuity and robustness under varying conditions.
-
-### How Kalman Filter is useful for real-time object tracking
-The implementation of the Kalman Filter in this project demonstrates its efficacy in combining real-time object detection with predictive tracking, providing a robust solution for tracking objects in motion within noisy environments.
-
-
-
 
 
 # Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient
