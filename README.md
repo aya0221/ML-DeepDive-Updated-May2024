@@ -2,7 +2,7 @@
 Containing detailed explanations and practical code examples for key machine learning concepts, including Kalman Filters, Gradient Descent, and CNN architectures.
 
 - [Kalman Filter Application in Object Tracking](#kalman-filter-application-in-object-tracking)
-- [Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient](#gradient,-gradient-descent,-back-propagation,-sgd,-application-of-gradient)
+- [Gradient Gradient Descent Back Propagation SGD Application of Gradient](#gradient-gradient-descent-back-propagation-sgd-application-of-gradient)
 - [Conv1D and Conv2D](#conv1d-and-conv2d)
 - [Non-linear CNN](#non-linear-cnn)
 
