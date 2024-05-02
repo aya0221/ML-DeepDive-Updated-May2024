@@ -11,17 +11,19 @@ Containing detailed explanations and practical code examples for key machine lea
 # Kalman Filter Application in Object Tracking
 
 ### Overview
-I employed the Kalman Filter in object tracking tasks to enhance the tracking accuracy of balls in video sequences. This method improves tracking by using data from a CNN-based object detector, which, while effective, often includes some errors or noise. These errors can arise due to variations in lighting, partial blockages of the object, or limitations of the detector itself. The Kalman Filter helps correct these inaccuracies by blending the imperfect measurements with predicted states from previous data, leading to more reliable tracking outcomes! 
-Kalman filter is so effective as it continually estimates the state of a dynamic system, adjusts those estimates based on new measurements, and predicts future states.
- Broad idea is it is propagating and updating Gaussians and updating their covariances. Using the current state and estimates, we can predict the next state. The second step, correction, includes a noisy measurement which helps update the state.
-<img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="50%"> 
-※1
+I utilized the Kalman Filter in object tracking tasks to enhance the accuracy of tracking balls in video sequences. This method leverages data from a CNN-based object detector, which, while effective, is susceptible to errors or noise due to factors like variable lighting, partial obstructions, or inherent limitations of the detector. The Kalman Filter addresses these inaccuracies by merging imperfect measurements with predicted states from prior data, resulting in more reliable tracking outcomes. The Kalman Filter excels because it continuously estimates the state of a dynamic system, refines those estimates with new measurements, and predicts future states. Essentially, it involves propagating and updating Gaussians and their covariances. Starting with the current state and estimates, we predict the next state. The subsequent correction step incorporates a noisy measurement to refine the state update.
 
-### My application of Kalman Filter on the Video Object Tracking
-The Kalman Filter is employed after detecting objects using a CNN-based detection system. It uses the noisy measurements of object positions to:
-- **Predict** the object's future location based on its current estimated state
-- **Correct** this prediction using new measurement data to refine the accuracy of the object's tracked position
-Kalman Filter helps in maintaining robust tracking even when the object is partially occluded or when the frame includes significant noise!
+![Kalman Filter Tracking Visualization](https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36 "Kalman Filter in Action")  
+※Figure 1: Visualization of Kalman Filter application in tracking
+
+
+### My Application of the Kalman Filter in Video Object Tracking
+After detecting objects using a CNN-based detection system, the Kalman Filter is employed to process the noisy measurements of object positions. The steps involved are:
+- **Predict**: Estimating the object's future location based on its current state.
+- **Correct**: Refining this prediction with new measurement data to improve the tracking accuracy.
+
+This approach ensures robust tracking, even in cases where the object is partially occluded or the video frame contains significant noise, showcasing the Kalman Filter's capability to adapt and maintain accuracy under challenging conditions.
+
 
 
 ### Variables Used in the Kalman Filter Mathematical Model
