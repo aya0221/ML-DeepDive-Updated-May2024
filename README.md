@@ -2,9 +2,7 @@
 Containing detailed explanations and practical code examples for key machine learning concepts, including Kalman Filters, Gradient Descent, and CNN architectures.
 
 - [Kalman Filter Application in Object Tracking](#kalman-filter-application-in-object-tracking)
-- [Gradient Descent and Back Propagation](#gradient-descent-and-back-propagation)
-- [Difference Between SGD and Gradient Descent](#difference-between-sgd-and-gradient-descent)
-- [Application of Gradient](#application-of-gradient)
+- [Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient](#gradient,-gradient-descent,-back-propagation,-sgd,-application-of-gradient)
 - [Conv1D and Conv2D](#conv1d-and-conv2d)
 - [Non-linear CNN](#non-linear-cnn)
 
@@ -53,23 +51,20 @@ The implementation of the Kalman Filter in this project demonstrates its efficac
 
 
 
-# Gradient Descent and Back Propagation
-**Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving towards the steepest descent as defined by the *negative* of the gradient. Goal is to find the model parameters that minimize a loss function.
+# Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient
+- **Gradient** is a vector of partial derivatives that *points in the direction of the greatest increase of a function*. In ML, we use the gradient to update the weights of models, *moving in the direction that most reduces the loss*.
+
+- **Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving towards the steepest descent as defined by the *negative* of the gradient. Goal is to find the model parameters that minimize a loss function.
 let parameter p:
 $$p = p-learning rate * ∂/∂p = p-α * ∂/∂p$$
 
-**Gradient** is a vector of partial derivatives that *points in the direction of the greatest increase of a function*. In ML, we use the gradient to update the weights of models, *moving in the direction that most reduces the loss*.
+- **Back Propagation** is used to calculate the gradient needed in the gradient descent step of neural network training by computing the gradient of the loss function with respect to each weight by the **chain rule**, working backward from the output layer to the input layer.
 
-**Back Propagation** is used to calculate the gradient needed in the gradient descent step of neural network training by computing the gradient of the loss function with respect to each weight by the **chain rule**, working backward from the output layer to the input layer.
+- **Difference Between SGD and Gradient Descent**:
+    - **SGD** updates the parameters using only a small subset of the data which can lead to faster convergence on large datasets
+    - **Batch Gradient Descent** uses the entire dataset to perform one update at a time
 
-
-# Difference Between SGD and Gradient Descent
-**SGD** updates the parameters using only a small subset of the data which can lead to faster convergence on large datasets
-
-**Batch Gradient Descent** uses the entire dataset to perform one update at a time
-
-
-# Application of Gradient
+- **Application of Gradient**
 During training, repeatedly adjusting the parameters of the model, using either the whole dataset (batch) or subsets of it (mini-batches), to minimize the loss function over multiple iterations or epochs
 
 # Conv1D and Conv2D
