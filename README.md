@@ -1,7 +1,15 @@
 ## ML-Fundamentals
 Containing detailed explanations and practical code examples for key machine learning concepts, including Kalman Filters, Gradient Descent, and CNN architectures.
 
-## Kalman Filter Application in Object Tracking
+- [Kalman Filter Application in Object Tracking](#kalman-filter-application-in-object-tracking)
+- [Gradient Descent and Back Propagation](#gradient-descent-and-back-propagation)
+- [Difference Between SGD and Gradient Descent](#difference-between-sgd-and-gradient-descent)
+- [Application of Gradient](#application-of-gradient)
+- [Conv1D and Conv2D](#conv1d-and-conv2d)
+- [Non-linear CNN](#non-linear-cnn)
+
+
+# Kalman Filter Application in Object Tracking
 
 ### Overview
 I employed the Kalman Filter in object tracking tasks to enhance the tracking accuracy of balls in video sequences. This method improves tracking by using data from a CNN-based object detector, which, while effective, often includes some errors or 'noise.' These errors can arise due to variations in lighting, partial blockages of the object, or limitations of the detector itself. The Kalman Filter helps correct these inaccuracies by blending the imperfect measurements with predicted states from previous data, leading to more reliable tracking outcomes!
@@ -40,3 +48,40 @@ Velocity is critical for predicting the future position of the ball, particularl
 
 ### How Kalman Filter is useful for real-time object tracking
 The implementation of the Kalman Filter in this project demonstrates its efficacy in combining real-time object detection with predictive tracking, providing a robust solution for tracking objects in motion within noisy environments
+
+
+
+
+
+# Gradient Descent and Back Propagation
+**Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving towards the steepest descent as defined by the *negative* of the gradient. Goal is to find the model parameters that minimize a loss function.
+let parameter p:
+$$p = p-learning rate * ∂/∂p = p-α * ∂/∂p$$
+
+**Gradient** is a vector of partial derivatives that *points in the direction of the greatest increase of a function*. In ML, we use the gradient to update the weights of models, *moving in the direction that most reduces the loss*.
+
+**Back Propagation** is used to calculate the gradient needed in the gradient descent step of neural network training by computing the gradient of the loss function with respect to each weight by the **chain rule**, working backward from the output layer to the input layer.
+
+
+# Difference Between SGD and Gradient Descent
+**SGD** updates the parameters using only a small subset of the data which can lead to faster convergence on large datasets
+
+**Batch Gradient Descent** uses the entire dataset to perform one update at a time
+
+
+# Application of Gradient
+During training, repeatedly adjusting the parameters of the model, using either the whole dataset (batch) or subsets of it (mini-batches), to minimize the loss function over multiple iterations or epochs
+
+# Conv1D and Conv2D
+**Conv1D**: for 1D data, e.g., time-series, audio data - *where the layer will learn from patterns occurring over time*.
+
+**Conv2D** for 2D data, e.g., images - *where the layers help learn features from the input by applying filters that capture spatial hierarchies*, (identifying simple edges in early layers and complex features like textures in deeper layers).
+
+
+# Non-linear CNN
+A Non-linear CNN incorporates non-linear activation functions like ReLU (Rectified Linear Unit) to introduce non-linear properties into the model, allowing it to learn more complex patterns. Without non-linearities, CNNs would behave just like a single linear classifier.
+
+
+
+
+
