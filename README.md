@@ -80,7 +80,9 @@ Containing detailed explanations and practical code examples for key machine lea
 
 - **Back Propagation** is used to calculate the gradient required in the gradient descent step of neural network training. This involves computing the gradient of the loss function with respect to each weight by applying the **chain rule**, working backward from the output layer to the input layer:
   $$\frac{\partial \mathcal{L}}{\partial w} = \frac{\partial \mathcal{L}}{\partial y} \cdot \frac{\partial y}{\partial w}$$
-  , where \( y \) is the output and \( w \) are the weights
+  , where $\( y \)$ is the output and $\( w \)$ are the weights
+    - e.g., Mean Squared Error (MSE) is defined as: $$\text{MSE} = \frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2$$
+          , where $\(y_i\)$ are the true values, $\(\hat{y}_i\)$ are the predicted values, and $\(n\)$ is the number of samples
 
 - **Difference Between SGD and Gradient Descent**:
     - **Stochastic Gradient Descent (SGD)** updates the parameters using only a small subset of the data, which can lead to faster convergence on large datasets.
@@ -95,11 +97,40 @@ Containing detailed explanations and practical code examples for key machine lea
 - **Conv2D** is used for processing 2D data, such as images. These layers learn features from the input by applying filters that capture spatial hierarchies, identifying simple edges in early layers and more complex features like textures in deeper layers.
 
 # Non-linear CNN
+#### ReLU (Rectified Linear Unit)
+- **Formula**:
+  $$f(x) = \max(0, x)$$
+- **Use Cases**:
+  - everything
+  - helps with the vanishing gradient problem, allowing models to learn faster and perform better
 
-- A Non-linear CNN incorporates non-linear activation functions like ReLU (Rectified Linear Unit) to introduce non-linear properties into the model, allowing it to learn more complex patterns. Without non-linearities, CNNs would behave just like a single linear classifier, limiting their ability to model complex relationships in the data.
+#### Sigmoid
+- **Formula**:
+  $$f(x) = \frac{1}{1 + e^{-x}}$$
+- **Use Cases**:
+  - binary classification problems at the output layer where the result is mapped between 0 and 1, making it interpretable as a probability
+  - useful in models where we need to calculate probabilities that add up to one (e.g., logistic regression)
 
+#### Tanh (Hyperbolic Tangent)
+- **Formula**:
+  $$f(x) = \tanh(x) = \frac{2}{1 + e^{-2x}} - 1$$
+- **Use Cases**:
+  - often used in hidden layers as it centers the output between -1 and 1, which can lead to better training performance in certain cases
+  - useful for feature representation in dl where data normalization might be important
 
+#### Softmax
+- **Formula**:
+  $$f(x_i) = \frac{e^{x_i}}{\sum_{k} e^{x_k}}$$
+- **Use Cases**:
+  - typically used in the output layer to perform multi-class categorization - each output can be interpreted as a probability that the input belongs to one of the classes
+  - classification problems where only one result is the correct output (e.g., classifying images of digits)
 
+#### Leaky ReLU
+- **Formula**:
+  $$f(x) = \max(0.01x, x)$$
+- **Use Cases**:
+  - addresses the "dying ReLU" problem by allowing a small gradient when the unit is not active
+  - useful in scenarios where ReLU might result in a lot of dead neurons
 
 # Sources
 ※1:[Sort and Deep-SORT Based Multi-Object Tracking for Mobile Robotics: Evaluation with New Data Association Metrics](https://www.researchgate.net/publication/358134782_Sort_and_Deep-SORT_Based_Multi-Object_Tracking_for_Mobile_Robotics_Evaluation_with_New_Data_Association_Metrics)
