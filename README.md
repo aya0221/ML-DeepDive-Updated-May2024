@@ -30,7 +30,7 @@ This approach ensures robust tracking, even in cases where the object is partial
 - **State Vector \(x(t)\)**: Represents the estimated states of the system, including position \((x, y)\) and velocity \((vx, vy)\). Velocity is derived from changes in position over time, calculated as:
   $$vx = \frac{(x_{\text{current}} - x_{\text{previous}})}{\Delta t}$$
   $$vy = \frac{(y_{\text{current}} - y_{\text{previous}})}{\Delta t}$$
-  where \(\Delta t\) is the time interval between frames.
+  where \(\Delta t\) is the time interval between frames
 
 - **Measurement Vector \(z(t)\)**: The observed positions from a CNN (detection system), which can be noisy
 
@@ -66,31 +66,35 @@ This step adjusts the prediction based on the new measurement data:
 <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="40%"> 
 ※2
 
-
-
 # Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient
-- **Gradient** is a vector of partial derivatives that *points in the direction of the greatest increase of a function*. In ML, we use the gradient to update the weights of models, *moving in the direction that most reduces the loss*.
 
-- **Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving towards the steepest descent as defined by the *negative* of the gradient. Goal is to find the model parameters that minimize a loss function.
-let parameter p:
-$$p = p-learning rate * ∂/∂p = p-α * ∂/∂p$$
+- **Gradient** is a vector of partial derivatives, represented as $$\nabla f(x)$$, which *points in the direction of the greatest increase of a function*. In machine learning, we use the gradient to update the weights of models, *moving in the direction that most reduces the loss*. This is computed as:
+  $$\nabla f(x) = \left[\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, ..., \frac{\partial f}{\partial x_n}\right]^T$$
 
-- **Back Propagation** is used to calculate the gradient needed in the gradient descent step of neural network training by computing the gradient of the loss function with respect to each weight by the **chain rule**, working backward from the output layer to the input layer.
+- **Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving in the direction of the steepest descent, defined by the *negative* of the gradient. The goal is to find the model parameters that minimize a loss function. For a parameter \( p \):
+  $$p = p - \alpha \frac{\partial \mathcal{L}}{\partial p}$$
+  , where $\( \alpha \)$ is the learning rate and $\( \mathcal{L} \)$ is the loss function
+
+- **Back Propagation** is used to calculate the gradient required in the gradient descent step of neural network training. This involves computing the gradient of the loss function with respect to each weight by applying the **chain rule**, working backward from the output layer to the input layer:
+  $$\frac{\partial \mathcal{L}}{\partial w} = \frac{\partial \mathcal{L}}{\partial y} \cdot \frac{\partial y}{\partial w}$$
+  , where \( y \) is the output and \( w \) are the weights
 
 - **Difference Between SGD and Gradient Descent**:
-    - **SGD** updates the parameters using only a small subset of the data which can lead to faster convergence on large datasets
-    - **Batch Gradient Descent** uses the entire dataset to perform one update at a time
+    - **Stochastic Gradient Descent (SGD)** updates the parameters using only a small subset of the data, which can lead to faster convergence on large datasets.
+    - **Batch Gradient Descent** uses the entire dataset to perform one update at a time, providing a more stable but slower convergence.
 
-- **Application of Gradient**
-During training, repeatedly adjusting the parameters of the model, using either the whole dataset (batch) or subsets of it (mini-batches), to minimize the loss function over multiple iterations or epochs
+- **Application of Gradient**:
+  During training, the parameters of the model are repeatedly adjusted using either the whole dataset (batch) or subsets of it (mini-batches), to minimize the loss function over multiple iterations or epochs. The gradient provides the necessary direction for this adjustment.
 
 # Conv1D and Conv2D
-- **Conv1D**: for 1D data, e.g., time-series, audio data - *where the layer will learn from patterns occurring over time*.
-- **Conv2D** for 2D data, e.g., images - *where the layers help learn features from the input by applying filters that capture spatial hierarchies*, (identifying simple edges in early layers and complex features like textures in deeper layers).
 
+- **Conv1D** is used for processing 1D data, such as time-series or audio signals, where the layer will learn from patterns occurring over time.
+- **Conv2D** is used for processing 2D data, such as images. These layers learn features from the input by applying filters that capture spatial hierarchies, identifying simple edges in early layers and more complex features like textures in deeper layers.
 
 # Non-linear CNN
-A Non-linear CNN incorporates non-linear activation functions like ReLU (Rectified Linear Unit) to introduce non-linear properties into the model, allowing it to learn more complex patterns. Without non-linearities, CNNs would behave just like a single linear classifier.
+
+- A Non-linear CNN incorporates non-linear activation functions like ReLU (Rectified Linear Unit) to introduce non-linear properties into the model, allowing it to learn more complex patterns. Without non-linearities, CNNs would behave just like a single linear classifier, limiting their ability to model complex relationships in the data.
+
 
 
 
