@@ -22,7 +22,6 @@ Containing detailed explanations and practical code examples for key machine lea
       <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="40%"> 
       ※1
 
-
 -  **Variables used in the Kalman Filter Mathematical Model**
     - **State Vector \(x(t)\)**: Represents the estimated states of the system, including position \((x, y)\) and velocity \((vx, vy)\). Velocity is derived from changes in position over time, calculated as:
   $$vx = \frac{(x_{\text{current}} - x_{\text{previous}})}{\Delta t}$$
@@ -54,8 +53,6 @@ Containing detailed explanations and practical code examples for key machine lea
          - **Predicted State Estimate**: $$\hat{x}^- = F \hat{x}$$
          - **Predicted Covariance Estimate**: $$P^- = FPF^T + Q$$
              , where $\(F\)$ is the state transition matrix that describes how the state variables are expected to evolve from one time step to the next, $\(P\)$ is the covariance matrix of the previous estimate indicating the uncertainty associated with that estimate, $\(Q\)$ is the process noise covariance matrix accounting for the process uncertainty, and $\(\hat{x}\)$ is the prior state estimate
-  
-
 
      - **Correction**
 
@@ -65,8 +62,7 @@ Containing detailed explanations and practical code examples for key machine lea
          - **Updated Covariance Estimate**: $$P = (I - KH) P^-$$
              , where $\(K\)$ is the Kalman Gain which determines the extent to which the new measurement is incorporated into the state estimate, $\(P^-\)$ is the predicted covariance matrix from the prediction phase, $\(H\)$ is the measurement matrix that relates the state estimate to the measurement domain, $\(R\)$ is the measurement noise covariance matrix reflecting the uncertainty in the measurements, $\(I\)$ is the identity matrix, and $\(z\)$ is the new measurement
 
-           <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="30%">
-           ※2
+           <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="30%"> ※2
 
 # Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient
 
@@ -77,6 +73,65 @@ Containing detailed explanations and practical code examples for key machine lea
 - **Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving in the direction of the steepest descent, defined by the *negative* of the gradient. The goal is to find the model parameters that minimize a loss function. For a parameter \( p \):
   $$p = p - \alpha \frac{\partial \mathcal{L}}{\partial p}$$
   , where $\( \alpha \)$ is the learning rate and $\( \mathcal{L} \)$ is the loss function
+
+  - **Implementation**
+
+    let the function $f(x) = (x - 5)^2$:
+    
+    ```
+    def function(x):
+        return (x - 5)**2
+    ```
+      - **PyTorch** provides a more explicit and manual control over the gradient descent process, uses dynamic computation graphs
+        ```
+        import torch
+        
+        # Define a parameter to optimize
+        x = torch.tensor([10.0], requires_grad=True)
+        
+        # Set the optimizer (Stochastic Gradient Descent)
+        optimizer = torch.optim.SGD([x], lr=0.1)
+        
+        # Number of steps in gradient descent
+        epochs = 20
+        
+        for epoch in range(epochs):
+            optimizer.zero_grad()   # Clear gradients
+            loss = function(x)      # Compute the loss
+            loss.backward()         # Backpropagate to compute gradients
+            optimizer.step()        # Update the parameters
+            print(f'Epoch {epoch+1}: x = {x.item()}, loss = {loss.item()}')
+        ```
+
+      - **TensorFlow (Keras)** good particularly when granular control over every step of the training process is not needed - tends to abstract many details in its execution, making it simpler and cleaner
+        ```
+        import tensorflow as tf
+        
+        # Define a variable to optimize
+        x = tf.Variable([10.0])
+        
+        # Set the optimizer (Stochastic Gradient Descent)
+        optimizer = tf.optimizers.SGD(learning_rate=0.1)
+        
+        # Number of steps in gradient descent
+        epochs = 20
+        
+        for epoch in range(epochs):
+            with tf.GradientTape() as tape:
+                loss = function(x)  # Compute the loss
+            grads = tape.gradient(loss, [x])  # Compute the gradients
+            optimizer.apply_gradients(zip(grads, [x]))  # Update the parameters
+            print(f'Epoch {epoch+1}: x = {x.numpy()[0]}, loss = {loss.numpy()}')
+        ```
+
+
+
+- **PyTorch** is often preferred for research and dynamic models because of its flexibility and explicit control over the model training steps. It is ideal for projects where customization and complex architectures are involved.
+
+- **TensorFlow/Keras** provides a more streamlined and high-level approach, which is excellent for production environments and when ease of use and scalability are priorities. It's well-suited for standard neural network architectures and rapid development.
+
+Adding these snippets to your GitHub README will demonstrate both your practical skills in implementing gradient descent across different frameworks and your understanding of the appropriate contexts for using each library. This can be highly valuable for impressing recruiters and showcasing your versatile technical capabilities.
+
 
 - **Back Propagation** is used to calculate the gradient required in the gradient descent step of neural network training. This involves computing the gradient of the loss function with respect to each weight by applying the **chain rule**, working backward from the output layer to the input layer:
   $$\frac{\partial \mathcal{L}}{\partial w} = \frac{\partial \mathcal{L}}{\partial y} \cdot \frac{\partial y}{\partial w}$$
