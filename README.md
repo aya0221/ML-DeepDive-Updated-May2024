@@ -65,14 +65,14 @@ Containing detailed explanations and practical code examples for key machine lea
          - **Updated Covariance Estimate**: $$P = (I - KH) P^-$$
              , where $\(K\)$ is the Kalman Gain which determines the extent to which the new measurement is incorporated into the state estimate, $\(P^-\)$ is the predicted covariance matrix from the prediction phase, $\(H\)$ is the measurement matrix that relates the state estimate to the measurement domain, $\(R\)$ is the measurement noise covariance matrix reflecting the uncertainty in the measurements, $\(I\)$ is the identity matrix, and $\(z\)$ is the new measurement
 
-
-<img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="40%"> 
-※2
+           <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="30%">
+           ※2
 
 # Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient
 
 - **Gradient** is a vector of partial derivatives, represented as $$\nabla f(x)$$, which *points in the direction of the greatest increase of a function*. In machine learning, we use the gradient to update the weights of models, *moving in the direction that most reduces the loss*. This is computed as:
   $$\nabla f(x) = \left[\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, ..., \frac{\partial f}{\partial x_n}\right]^T$$
+
 
 - **Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving in the direction of the steepest descent, defined by the *negative* of the gradient. The goal is to find the model parameters that minimize a loss function. For a parameter \( p \):
   $$p = p - \alpha \frac{\partial \mathcal{L}}{\partial p}$$
