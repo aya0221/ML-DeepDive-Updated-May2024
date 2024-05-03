@@ -1,5 +1,7 @@
 ## ML-Fundamentals
-Containing detailed explanations and practical code examples for key machine learning concepts, including Kalman Filters, Gradient Descent, and CNN architectures.
+Containing detailed explanations and code snippets of ML
+
+Topics covered: Kalman Filters, Gradient Descent, and CNN architectures
 
 - [Kalman Filter Application in Object Tracking](#kalman-filter-application-in-object-tracking)
 - [Gradient Gradient Descent Back Propagation SGD Application of Gradient](#gradient-gradient-descent-back-propagation-sgd-application-of-gradient)
@@ -12,15 +14,17 @@ Containing detailed explanations and practical code examples for key machine lea
 
 - **Overview**
 
-    I utilized the Kalman Filter in object tracking tasks to enhance the accuracy of tracking balls in video sequences. This method leverages data from a CNN-based object detector, which, while effective, is susceptible to errors or noise due to factors like variable lighting, partial obstructions, or inherent limitations of the detector. The Kalman Filter addresses these inaccuracies by merging imperfect measurements with predicted states from prior data, resulting in more reliable tracking outcomes. The Kalman Filter excels because it continuously estimates the state of a dynamic system, refines those estimates with new measurements, and predicts future states. Essentially, it involves propagating and updating Gaussians and their covariances. Starting with the current state and estimates, we predict the next state. The subsequent correction step incorporates a noisy measurement to refine the state update.
+  I employed the **Kalman Filter** to refine the tracking of balls in video sequences, utilizing measurements from a CNN-based object detector. Despite the efficacy of CNN detectors, they are prone to measurement errors influenced by varying lighting conditions, obstructions, and detector limitations. The Kalman Filter enhances tracking precision by effectively merging these imperfect measurements with predicted states. This process involves continuously estimating and updating the system's states (position) and velocity (based on both predicted dynamics and new measurements). Each cycle of the filter predicts future states and corrects these predictions as new data becomes available.
 
-- **My Application of the Kalman Filter in Video Object Tracking**
+- **Application of the Kalman Filter in Video Object Tracking**
 
-    After detecting objects using a CNN-based detection system, the Kalman Filter is employed to process the noisy measurements of object positions. The steps involved are:
-    - **Predict**: Estimating the object's future location based on its current state
-    - **Correct**: Refining this prediction with new measurement data to improve the tracking accuracy
-      <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="40%"> 
-      ※1
+  The use of the Kalman Filter in my project follows a straightforward two-step process, aligning with the typical predict-correct cycle of state estimation:
+    - **Predict**: Compute the predicted next state of the ball using the current state estimates, factoring in the expected motion over time
+    - **Correct**: Adjust the predicted state using fresh, albeit noisy, measurements from the CNN-based detection system to refine the position and velocity estimates
+
+      <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/2f370ff1-3541-4223-a7bd-29541c514e36" width="40%"> ※1
+      <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="30%"> ※2
+
 
 -  **Variables used in the Kalman Filter Mathematical Model**
     - **State Vector \(x(t)\)**: Represents the estimated states of the system, including position \((x, y)\) and velocity \((vx, vy)\). Velocity is derived from changes in position over time, calculated as:
@@ -43,18 +47,14 @@ Containing detailed explanations and practical code examples for key machine lea
     - **Measurement Matrix \(H\)**: Relates (maps) the state vector to the measurement vector, focusing primarily on the position components
 
 
--  **Operation Cycle of the Kalman Filter**
-
-   The Kalman Filter operates through two principal phases: **Prediction** and **Correction**. Each step employs mathematical models and matrices to project and adjust the state estimates of a dynamic system
-
-     - **Prediction**
+-  **Operation Cycle of the Kalman Filter: Prediction & Correction**
+   1. **Prediction**
 
        This phase uses the state transition matrix to forecast future state estimates based on current estimates:
          - **Predicted State Estimate**: $$\hat{x}^- = F \hat{x}$$
          - **Predicted Covariance Estimate**: $$P^- = FPF^T + Q$$
              , where $\(F\)$ is the state transition matrix that describes how the state variables are expected to evolve from one time step to the next, $\(P\)$ is the covariance matrix of the previous estimate indicating the uncertainty associated with that estimate, $\(Q\)$ is the process noise covariance matrix accounting for the process uncertainty, and $\(\hat{x}\)$ is the prior state estimate
-
-     - **Correction**
+   2. **Correction**
 
        This phase incorporates new measurement data to refine the predictions made in the previous step:
          - **Kalman Gain Calculation**: $$K = P^- H^T (H P^- H^T + R)^{-1}$$
@@ -62,76 +62,80 @@ Containing detailed explanations and practical code examples for key machine lea
          - **Updated Covariance Estimate**: $$P = (I - KH) P^-$$
              , where $\(K\)$ is the Kalman Gain which determines the extent to which the new measurement is incorporated into the state estimate, $\(P^-\)$ is the predicted covariance matrix from the prediction phase, $\(H\)$ is the measurement matrix that relates the state estimate to the measurement domain, $\(R\)$ is the measurement noise covariance matrix reflecting the uncertainty in the measurements, $\(I\)$ is the identity matrix, and $\(z\)$ is the new measurement
 
-           <img src="https://github.com/aya0221/ML-Fundamentals/assets/69786640/df49494d-4ae1-4587-ade9-282ec67b5f32" width="30%"> ※2
+            here is the code snippet:
+            ```
+            import numpy as np
+            
+            class BallTracker:
+                def __init__(self, process_noise_std, measurement_noise_std, dt):
+                    """
+                    Initialize the ball tracking Kalman Filter
+                    :param process_noise_std: Standard deviation of the process noise
+                    :param measurement_noise_std: Standard deviation of the measurement noise
+                    :param dt: Time interval between measurements
+                    """
+                    
+                    # Define the initial state [x, y, vx, vy] (position and velocity)
+                    self.x = np.zeros((4, 1))
+                    
+                    # Define the state transition model
+                    self.A = np.array([[1, 0, dt, 0],
+                                       [0, 1, 0, dt],
+                                       [0, 0, 1, 0],
+                                       [0, 0, 0, 1]])
+                    
+                    # Define the observation model
+                    self.H = np.array([[1, 0, 0, 0],
+                                       [0, 1, 0, 0]])
+                    
+                    # Define the process noise covariance
+                    q = process_noise_std**2
+                    self.Q = np.array([[q, 0, 0, 0],
+                                       [0, q, 0, 0],
+                                       [0, 0, q, 0],
+                                       [0, 0, 0, q]])
+                    
+                    # Define the measurement noise covariance
+                    r = measurement_noise_std**2
+                    self.R = np.array([[r, 0],
+                                       [0, r]])
+                    
+                    # Initialize the covariance of the state estimate
+                    self.P = np.eye(4)
+                
+                def predict(self):
+                    # Predict the next state
+                    self.x = np.dot(self.A, self.x)
+                    self.P = np.dot(self.A, np.dot(self.P, self.A.T)) + self.Q
+                
+                def update(self, z):
+                    # Update the state with a new measurement
+                    y = z - np.dot(self.H, self.x)
+                    S = np.dot(self.H, np.dot(self.P, self.H.T)) + self.R
+                    K = np.dot(np.dot(self.P, self.H.T), np.linalg.inv(S))
+                    self.x += np.dot(K, y)
+                    self.P = self.P - np.dot(K, np.dot(self.H, self.P))
+            
+                def get_estimated_position(self):
+                    return self.x[0, 0], self.x[1, 0]
+            
+            tracker = BallTracker(process_noise_std=1e-2, measurement_noise_std=1e-1, dt=0.1)
+            measurements = [(5, 5), (6, 6), (7, 7), (8, 8)]  # CNN-based measurements (here, the numbers are random)
+            
+            for measurement in measurements:
+                tracker.predict()
+                tracker.update(np.array([[measurement[0]], [measurement[1]]]))
+                print("estimated position is :", tracker.get_estimated_position())
+            ```
 
 # Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient
 
 - **Gradient** is a vector of partial derivatives, represented as $$\nabla f(x)$$, which *points in the direction of the greatest increase of a function*. In machine learning, we use the gradient to update the weights of models, *moving in the direction that most reduces the loss*. This is computed as:
   $$\nabla f(x) = \left[\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, ..., \frac{\partial f}{\partial x_n}\right]^T$$
 
-
 - **Gradient Descent** is an optimization algorithm used to minimize a function by iteratively moving in the direction of the steepest descent, defined by the *negative* of the gradient. The goal is to find the model parameters that minimize a loss function. For a parameter \( p \):
   $$p = p - \alpha \frac{\partial \mathcal{L}}{\partial p}$$
   , where $\( \alpha \)$ is the learning rate and $\( \mathcal{L} \)$ is the loss function
-
-  - **Implementation**
-
-    let the function $f(x) = (x - 5)^2$:
-    
-    ```
-    def function(x):
-        return (x - 5)**2
-    ```
-      - **PyTorch** provides a more explicit and manual control over the gradient descent process, uses dynamic computation graphs
-        ```
-        import torch
-        
-        # Define a parameter to optimize
-        x = torch.tensor([10.0], requires_grad=True)
-        
-        # Set the optimizer (Stochastic Gradient Descent)
-        optimizer = torch.optim.SGD([x], lr=0.1)
-        
-        # Number of steps in gradient descent
-        epochs = 20
-        
-        for epoch in range(epochs):
-            optimizer.zero_grad()   # Clear gradients
-            loss = function(x)      # Compute the loss
-            loss.backward()         # Backpropagate to compute gradients
-            optimizer.step()        # Update the parameters
-            print(f'Epoch {epoch+1}: x = {x.item()}, loss = {loss.item()}')
-        ```
-
-      - **TensorFlow (Keras)** good particularly when granular control over every step of the training process is not needed - tends to abstract many details in its execution, making it simpler and cleaner
-        ```
-        import tensorflow as tf
-        
-        # Define a variable to optimize
-        x = tf.Variable([10.0])
-        
-        # Set the optimizer (Stochastic Gradient Descent)
-        optimizer = tf.optimizers.SGD(learning_rate=0.1)
-        
-        # Number of steps in gradient descent
-        epochs = 20
-        
-        for epoch in range(epochs):
-            with tf.GradientTape() as tape:
-                loss = function(x)  # Compute the loss
-            grads = tape.gradient(loss, [x])  # Compute the gradients
-            optimizer.apply_gradients(zip(grads, [x]))  # Update the parameters
-            print(f'Epoch {epoch+1}: x = {x.numpy()[0]}, loss = {loss.numpy()}')
-        ```
-
-
-
-- **PyTorch** is often preferred for research and dynamic models because of its flexibility and explicit control over the model training steps. It is ideal for projects where customization and complex architectures are involved.
-
-- **TensorFlow/Keras** provides a more streamlined and high-level approach, which is excellent for production environments and when ease of use and scalability are priorities. It's well-suited for standard neural network architectures and rapid development.
-
-Adding these snippets to your GitHub README will demonstrate both your practical skills in implementing gradient descent across different frameworks and your understanding of the appropriate contexts for using each library. This can be highly valuable for impressing recruiters and showcasing your versatile technical capabilities.
-
 
 - **Back Propagation** is used to calculate the gradient required in the gradient descent step of neural network training. This involves computing the gradient of the loss function with respect to each weight by applying the **chain rule**, working backward from the output layer to the input layer:
   $$\frac{\partial \mathcal{L}}{\partial w} = \frac{\partial \mathcal{L}}{\partial y} \cdot \frac{\partial y}{\partial w}$$
@@ -140,12 +144,117 @@ Adding these snippets to your GitHub README will demonstrate both your practical
           , where $\(y_i\)$ are the true values, $\(\hat{y}_i\)$ are the predicted values, and $\(n\)$ is the number of samples
 
 - **Difference Between SGD and Gradient Descent**:
+
+  let the dataset:
+    ```
+    data = tf.constant([[2.0], [3.0], [4.0], [5.0]], dtype=tf.float32)
+    targets = tf.constant([[4.0], [6.0], [8.0], [10.0]], dtype=tf.float32)
+    ```
+
+    Code Below are the same in both GD and SGD on Pytorch/Keras respectively
+
+  ex1, Pytorch
+
+    ```
+    import torch
+    
+    # Define a simple dataset
+    data = torch.tensor([[2.0], [3.0], [4.0], [5.0]])
+    targets = torch.tensor([[4.0], [6.0], [8.0], [10.0]])
+    
+    # Initialize parameter with requires_grad
+    w = torch.tensor([1.0], requires_grad=True)
+    
+    # Learning rate and epochs
+    lr = 0.01
+    epochs = 100
+    ```
+
+  ex2, Keras
+  
+    ```
+    import tensorflow as tf
+    # Define model
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(1, input_shape=(1,))
+    ])
+    
+    # Compile model with SGD optimizer
+    model.compile(optimizer=tf.optimizers.SGD(learning_rate=0.01), loss='mse')
+    ```
+ 
     - **Stochastic Gradient Descent (SGD)** updates the parameters using only a small subset of the data, which can lead to faster convergence on large datasets.
-    - **Batch Gradient Descent** uses the entire dataset to perform one update at a time, providing a more stable but slower convergence.
+      
+      ex1. Pytorch:
+        ```
+        for epoch in range(epochs):
+            total_loss = 0
+            for x, y in zip(data, targets):
+                model_output = x * w
+                loss = (y - model_output)**2
+                loss.backward()  # Compute gradients
+                with torch.no_grad():
+                    w -= lr * w.grad  # Update parameters
+                w.grad.zero_()  # Zero gradients
+                total_loss += loss.item()
+        
+            print(f'Epoch {epoch+1}, Loss: {total_loss / len(data)}, w: {w.item()}')
+        ```
+
+        ex2. Keras:
+
+        ```
+        # Fit model with a batch size of 1 for true SGD behavior
+        model.fit(data, targets, epochs=100, batch_size=1)
+        ```
+    - **Gradient Descent** uses the entire dataset to perform one update at a time, providing a more stable but slower convergence.
+      
+      ex1. Pytorch:
+      ```
+      for epoch in range(epochs):
+        model_output = data * w
+        loss = torch.mean((targets - model_output)**2)
+        loss.backward()  # Compute gradients
+        with torch.no_grad():
+            w -= lr * w.grad  # Update parameters
+        w.grad.zero_()  # Zero gradients
+    
+        print(f'Epoch {epoch+1}, Loss: {loss.item()}, w: {w.item()}')
+    ```
+
+    ex2. Keras:
+    ```
+    # Fit model
+    model.fit(data, targets, epochs=100)
+    ```
 
 - **Application of Gradient**:
   During training, the parameters of the model are repeatedly adjusted using either the whole dataset (batch) or subsets of it (mini-batches), to minimize the loss function over multiple iterations or epochs. The gradient provides the necessary direction for this adjustment.
-
+  (this is how SGD from Scratch for Gaussian Probability Density Function looks)
+        ```
+        import numpy as np
+        
+        # Sample data generated from a normal distribution
+        data = np.random.normal(loc=0, scale=1, size=100)
+        
+        # Parameters to optimize (mean and standard deviation)
+        mean = 5.0  # initial guess
+        std_dev = 10.0  # initial guess
+        
+        learning_rate = 0.01
+        epochs = 100
+        
+        for epoch in range(epochs):
+            # Compute gradients for both parameters
+            d_mean = np.mean((mean - data) / std_dev**2)
+            d_std_dev = np.mean(((mean - data)**2 - std_dev**2) / std_dev**3)
+            
+            # Update parameters
+            mean -= learning_rate * d_mean
+            std_dev -= learning_rate * d_std_dev
+        
+            print(f'Epoch {epoch+1}: mean = {mean}, std_dev = {std_dev}')
+        ```
 # Conv1D and Conv2D
 
 - **Conv1D** is used for processing 1D data, such as time-series or audio signals, where the layer will learn from patterns occurring over time
