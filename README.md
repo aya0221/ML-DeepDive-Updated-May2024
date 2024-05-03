@@ -61,72 +61,72 @@ Topics covered: Kalman Filters, Gradient Descent, and CNN architectures
          - **Updated State Estimate**: $$\hat{x} = \hat{x}^- + K(z - H \hat{x}^-)$$
          - **Updated Covariance Estimate**: $$P = (I - KH) P^-$$
              , where $\(K\)$ is the Kalman Gain which determines the extent to which the new measurement is incorporated into the state estimate, $\(P^-\)$ is the predicted covariance matrix from the prediction phase, $\(H\)$ is the measurement matrix that relates the state estimate to the measurement domain, $\(R\)$ is the measurement noise covariance matrix reflecting the uncertainty in the measurements, $\(I\)$ is the identity matrix, and $\(z\)$ is the new measurement
-
-            here is the code snippet:
-            ```
-            import numpy as np
+  
+    here is the code snippet:
+    ```
+    import numpy as np
+    
+    class BallTracker:
+        def __init__(self, process_noise_std, measurement_noise_std, dt):
+            """
+            Initialize the ball tracking Kalman Filter
+            :param process_noise_std: Standard deviation of the process noise
+            :param measurement_noise_std: Standard deviation of the measurement noise
+            :param dt: Time interval between measurements
+            """
             
-            class BallTracker:
-                def __init__(self, process_noise_std, measurement_noise_std, dt):
-                    """
-                    Initialize the ball tracking Kalman Filter
-                    :param process_noise_std: Standard deviation of the process noise
-                    :param measurement_noise_std: Standard deviation of the measurement noise
-                    :param dt: Time interval between measurements
-                    """
-                    
-                    # Define the initial state [x, y, vx, vy] (position and velocity)
-                    self.x = np.zeros((4, 1))
-                    
-                    # Define the state transition model
-                    self.A = np.array([[1, 0, dt, 0],
-                                       [0, 1, 0, dt],
-                                       [0, 0, 1, 0],
-                                       [0, 0, 0, 1]])
-                    
-                    # Define the observation model
-                    self.H = np.array([[1, 0, 0, 0],
-                                       [0, 1, 0, 0]])
-                    
-                    # Define the process noise covariance
-                    q = process_noise_std**2
-                    self.Q = np.array([[q, 0, 0, 0],
-                                       [0, q, 0, 0],
-                                       [0, 0, q, 0],
-                                       [0, 0, 0, q]])
-                    
-                    # Define the measurement noise covariance
-                    r = measurement_noise_std**2
-                    self.R = np.array([[r, 0],
-                                       [0, r]])
-                    
-                    # Initialize the covariance of the state estimate
-                    self.P = np.eye(4)
-                
-                def predict(self):
-                    # Predict the next state
-                    self.x = np.dot(self.A, self.x)
-                    self.P = np.dot(self.A, np.dot(self.P, self.A.T)) + self.Q
-                
-                def update(self, z):
-                    # Update the state with a new measurement
-                    y = z - np.dot(self.H, self.x)
-                    S = np.dot(self.H, np.dot(self.P, self.H.T)) + self.R
-                    K = np.dot(np.dot(self.P, self.H.T), np.linalg.inv(S))
-                    self.x += np.dot(K, y)
-                    self.P = self.P - np.dot(K, np.dot(self.H, self.P))
+            # Define the initial state [x, y, vx, vy] (position and velocity)
+            self.x = np.zeros((4, 1))
             
-                def get_estimated_position(self):
-                    return self.x[0, 0], self.x[1, 0]
+            # Define the state transition model
+            self.A = np.array([[1, 0, dt, 0],
+                               [0, 1, 0, dt],
+                               [0, 0, 1, 0],
+                               [0, 0, 0, 1]])
             
-            tracker = BallTracker(process_noise_std=1e-2, measurement_noise_std=1e-1, dt=0.1)
-            measurements = [(5, 5), (6, 6), (7, 7), (8, 8)]  # CNN-based measurements (here, the numbers are random)
+            # Define the observation model
+            self.H = np.array([[1, 0, 0, 0],
+                               [0, 1, 0, 0]])
             
-            for measurement in measurements:
-                tracker.predict()
-                tracker.update(np.array([[measurement[0]], [measurement[1]]]))
-                print("estimated position is :", tracker.get_estimated_position())
-            ```
+            # Define the process noise covariance
+            q = process_noise_std**2
+            self.Q = np.array([[q, 0, 0, 0],
+                               [0, q, 0, 0],
+                               [0, 0, q, 0],
+                               [0, 0, 0, q]])
+            
+            # Define the measurement noise covariance
+            r = measurement_noise_std**2
+            self.R = np.array([[r, 0],
+                               [0, r]])
+            
+            # Initialize the covariance of the state estimate
+            self.P = np.eye(4)
+        
+        def predict(self):
+            # Predict the next state
+            self.x = np.dot(self.A, self.x)
+            self.P = np.dot(self.A, np.dot(self.P, self.A.T)) + self.Q
+        
+        def update(self, z):
+            # Update the state with a new measurement
+            y = z - np.dot(self.H, self.x)
+            S = np.dot(self.H, np.dot(self.P, self.H.T)) + self.R
+            K = np.dot(np.dot(self.P, self.H.T), np.linalg.inv(S))
+            self.x += np.dot(K, y)
+            self.P = self.P - np.dot(K, np.dot(self.H, self.P))
+    
+        def get_estimated_position(self):
+            return self.x[0, 0], self.x[1, 0]
+    
+    tracker = BallTracker(process_noise_std=1e-2, measurement_noise_std=1e-1, dt=0.1)
+    measurements = [(5, 5), (6, 6), (7, 7), (8, 8)]  # CNN-based measurements (here, the numbers are random)
+    
+    for measurement in measurements:
+        tracker.predict()
+        tracker.update(np.array([[measurement[0]], [measurement[1]]]))
+        print("estimated position is :", tracker.get_estimated_position())
+    ```
 
 # Gradient, Gradient Descent, Back Propagation, SGD, Application of Gradient
 
@@ -207,6 +207,7 @@ Topics covered: Kalman Filters, Gradient Descent, and CNN architectures
         # Fit model with a batch size of 1 for true SGD behavior
         model.fit(data, targets, epochs=100, batch_size=1)
         ```
+        
     - **Gradient Descent** uses the entire dataset to perform one update at a time, providing a more stable but slower convergence.
       
       ex1. Pytorch:
@@ -220,41 +221,44 @@ Topics covered: Kalman Filters, Gradient Descent, and CNN architectures
         w.grad.zero_()  # Zero gradients
     
         print(f'Epoch {epoch+1}, Loss: {loss.item()}, w: {w.item()}')
-    ```
+      ```
+      
 
-    ex2. Keras:
-    ```
-    # Fit model
-    model.fit(data, targets, epochs=100)
-    ```
+      ex2. Keras:
+      ```
+      model.fit(data, targets, epochs=100)
+      ```
 
 - **Application of Gradient**:
   During training, the parameters of the model are repeatedly adjusted using either the whole dataset (batch) or subsets of it (mini-batches), to minimize the loss function over multiple iterations or epochs. The gradient provides the necessary direction for this adjustment.
-  (this is how SGD from Scratch for Gaussian Probability Density Function looks)
-        ```
-        import numpy as np
+  
+  (bonus ~ this is how SGD from Scratch for Gaussian Probability Density Function looks)
+  
+    ```
+    import numpy as np
+    
+    # Sample data generated from a normal distribution
+    data = np.random.normal(loc=0, scale=1, size=100)
+    
+    # Parameters to optimize (mean and standard deviation)
+    mean = 5.0  # initial guess
+    std_dev = 10.0  # initial guess
+    
+    learning_rate = 0.01
+    epochs = 100
+    
+    for epoch in range(epochs):
+        # Compute gradients for both parameters
+        d_mean = np.mean((mean - data) / std_dev**2)
+        d_std_dev = np.mean(((mean - data)**2 - std_dev**2) / std_dev**3)
         
-        # Sample data generated from a normal distribution
-        data = np.random.normal(loc=0, scale=1, size=100)
-        
-        # Parameters to optimize (mean and standard deviation)
-        mean = 5.0  # initial guess
-        std_dev = 10.0  # initial guess
-        
-        learning_rate = 0.01
-        epochs = 100
-        
-        for epoch in range(epochs):
-            # Compute gradients for both parameters
-            d_mean = np.mean((mean - data) / std_dev**2)
-            d_std_dev = np.mean(((mean - data)**2 - std_dev**2) / std_dev**3)
-            
-            # Update parameters
-            mean -= learning_rate * d_mean
-            std_dev -= learning_rate * d_std_dev
-        
-            print(f'Epoch {epoch+1}: mean = {mean}, std_dev = {std_dev}')
-        ```
+        # Update parameters
+        mean -= learning_rate * d_mean
+        std_dev -= learning_rate * d_std_dev
+    
+        print(f'Epoch {epoch+1}: mean = {mean}, std_dev = {std_dev}')
+    ```
+  
 # Conv1D and Conv2D
 
 - **Conv1D** is used for processing 1D data, such as time-series or audio signals, where the layer will learn from patterns occurring over time
