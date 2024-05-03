@@ -19,11 +19,8 @@ I utilized the Kalman Filter in object tracking tasks to enhance the accuracy of
 
 ### My Application of the Kalman Filter in Video Object Tracking
 After detecting objects using a CNN-based detection system, the Kalman Filter is employed to process the noisy measurements of object positions. The steps involved are:
-- **Predict**: Estimating the object's future location based on its current state.
-- **Correct**: Refining this prediction with new measurement data to improve the tracking accuracy.
-
-This approach ensures robust tracking, even in cases where the object is partially occluded or the video frame contains significant noise, showcasing the Kalman Filter's capability to adapt and maintain accuracy under challenging conditions.
-
+- **Predict**: Estimating the object's future location based on its current state
+- **Correct**: Refining this prediction with new measurement data to improve the tracking accuracy
 
 
 ### Variables Used in the Kalman Filter Mathematical Model
