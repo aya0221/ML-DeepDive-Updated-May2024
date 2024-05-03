@@ -93,8 +93,22 @@ Containing detailed explanations and practical code examples for key machine lea
 
 # Conv1D and Conv2D
 
-- **Conv1D** is used for processing 1D data, such as time-series or audio signals, where the layer will learn from patterns occurring over time.
+- **Conv1D** is used for processing 1D data, such as time-series or audio signals, where the layer will learn from patterns occurring over time
+  
+    ```
+    model_1d = tf.keras.Sequential([
+      tf.keras.layers.Conv1D(filters=32, kernel_size=3, activation='relu', input_shape=(128, 1))
+    ])
+    ```
+
 - **Conv2D** is used for processing 2D data, such as images. These layers learn features from the input by applying filters that capture spatial hierarchies, identifying simple edges in early layers and more complex features like textures in deeper layers.
+  
+    ```
+    model_1d = tf.keras.Sequential([
+      tf.keras.layers.Conv2D(filters=32, kernel_size=(3,3), activation='relu', input_shape=(28, 28, 1))
+    ])
+    ```
+
 
 # Non-linear CNN
 #### ReLU (Rectified Linear Unit)
@@ -103,6 +117,10 @@ Containing detailed explanations and practical code examples for key machine lea
 - **Use Cases**:
   - everything
   - helps with the vanishing gradient problem, allowing models to learn faster and perform better
+    ```
+    def relu(x):
+        return max(0, x)
+    ```
 
 #### Sigmoid
 - **Formula**:
@@ -110,6 +128,10 @@ Containing detailed explanations and practical code examples for key machine lea
 - **Use Cases**:
   - binary classification problems at the output layer where the result is mapped between 0 and 1, making it interpretable as a probability
   - useful in models where we need to calculate probabilities that add up to one (e.g., logistic regression)
+    ```
+    def sigmoid(x):
+        return 1 / (1 + np.exp(-x))
+    ```
 
 #### Tanh (Hyperbolic Tangent)
 - **Formula**:
